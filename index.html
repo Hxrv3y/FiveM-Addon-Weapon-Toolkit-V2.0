@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>FiveM Weapon Toolkit NG</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+    <div id="app">
+        <header>
+            <h1>FiveM Weapon Toolkit - Next Gen</h1>
+            <button id="theme-toggle-btn">Toggle Theme</button>
+            <nav id="main-tabs">
+                <button class="tab-link active" data-tab="create-addon">Create Addon Weapon</button>
+                <button class="tab-link" data-tab="configuration">Configuration</button>
+                <button class="tab-link" data-tab="components">Components</button>
+                <button class="tab-link" data-tab="export">Export</button>
+            </nav>
+        </header>
+
+        <div id="tab-content">
+            <div id="create-addon" class="tab-pane active">
+                <div class="create-addon-layout">
+                    <section id="center-content">
+                        <div class="settings-panel">
+                            <div>
+                                <label for="weapon-template-dropdown">Select Weapon Template:</label>
+                                <select id="weapon-template-dropdown">
+                                    <option value="">-- Select a Template --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="input-weapon-name">Weapon Name (Display Name):</label>
+                                <input type="text" id="input-weapon-name" placeholder="e.g., My Custom Rifle">
+                                <p class="field-description">The name that appears in-game, like in weapon wheels or selection menus.</p>
+                            </div>
+                            <div>
+                                <label for="input-weapon-id">Weapon ID (Spawn Name/Hash):</label>
+                                <input type="text" id="input-weapon-id" placeholder="e.g., WEAPON_MYRIFLE">
+                                <p class="field-description">The internal game ID used for spawning the weapon, usually uppercase (e.g., WEAPON_AK47). This will also be used for folder and file naming.</p>
+                            </div>
+                            <div>
+                                <label for="input-weapon-model">Weapon Model Name (without .ydr):</label>
+                                <input type="text" id="input-weapon-model" placeholder="e.g., w_ar_mycustomrifle">
+                                <p class="field-description">The name of your weapon's model file (YDR), without the extension. E.g., if your model is 'w_ar_ak47.ydr', enter 'w_ar_ak47'.</p>
+                            </div>
+                        </div>
+
+                        <div id="template-details-area">
+                            <p class="placeholder-message">Select a template from the dropdown to see details and customize assets.</p>
+                        </div>
+
+                        <button id="test-ipc" style="display:none;">Test IPC</button>
+                        <div id="ipc-response" style="display:none;"></div>
+                    </section>
+
+                    <aside id="right-sidebar-imported-files">
+                        <h2>Imported Files</h2>
+                        <ul id="imported-files-list">
+                            <li class="no-files-message">No files imported yet.</li>
+                        </ul>
+                    </aside>
+                </div>
+                <div id="bottom-bar-directory">
+                    <span>Directory where files were found: [path]</span>
+                    <button id="browse-dir-btn">Browse...</button>
+                </div>
+            </div>
+
+            <div id="configuration" class="tab-pane">
+                <h2>Weapon Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label for="config-audio-item">Select Audio Item:</label>
+                        <select id="config-audio-item">
+                            <option value="">-- Select Audio --</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label for="config-weapon-damage">Weapon Damage:</label>
+                        <input type="text" id="config-weapon-damage" placeholder="e.g., 50.0">
+                    </div>
+                    <div class="config-item">
+                        <label for="config-weapon-range">Weapon Range:</label>
+                        <input type="text" id="config-weapon-range" placeholder="e.g., 100.0">
+                    </div>
+                    <div class="config-item">
+                        <label for="config-ammo-type">Ammo Type:</label>
+                        <select id="config-ammo-type">
+                            <option value="">-- Select Ammo Type --</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label for="config-lod-distance">LOD Distance:</label>
+                        <input type="text" id="config-lod-distance" placeholder="e.g., 300.0">
+                    </div>
+                    <div class="config-item">
+                        <label for="config-reload-speed">Reload Speed Modifier:</label>
+                        <input type="text" id="config-reload-speed" placeholder="e.g., 1.0 (1.0 = normal, <1 faster, >1 slower)">
+                    </div>
+                    <div class="config-item">
+                        <label for="config-fire-rate">Fire Rate Modifier:</label>
+                        <input type="text" id="config-fire-rate" placeholder="e.g., 1.0 (1.0 = normal, >1 faster, <1 slower)">
+                    </div>
+                    <div class="config-item">
+                        <label for="config-damage-type">Damage Type:</label>
+                        <select id="config-damage-type">
+                            <option value="">-- Select Damage Type --</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label for="config-headshot-modifier">Headshot Damage Modifier:</label>
+                        <input type="text" id="config-headshot-modifier" placeholder="e.g., 2.0 (multiplies damage on headshot)">
+                    </div>
+                </div>
+            </div>
+
+            <div id="components" class="tab-pane">
+                <div class="components-layout">
+                    <div class="components-list-area">
+                        <h2>Added Components</h2>
+                        <ul id="added-components-list">
+                            <li class="no-components-message">No components added yet.</li>
+                        </ul>
+                        <div class="component-list-actions">
+                            <button id="add-new-component-btn">Add New Component</button>
+                            <button id="remove-selected-component-btn" disabled>Remove Selected</button>
+                        </div>
+                    </div>
+                    <div class="component-editor-area">
+                        <h2>Component Details</h2>
+                        <div class="form-row">
+                            <label for="comp-select-template">Select Component Template:</label>
+                            <select id="comp-select-template">
+                                <option value="">-- Select Template --</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="comp-name">Component Name:</label>
+                            <input type="text" id="comp-name" placeholder="e.g., Extended Clip (Rifle)">
+                        </div>
+                        <div class="form-row">
+                            <label for="comp-model-name">Model Name:</label>
+                            <input type="text" id="comp-model-name" placeholder="e.g., w_ar_rifle_mag2">
+                        </div>
+                        <div class="form-row">
+                            <label for="comp-model-lod">Model LOD Distance:</label>
+                            <input type="text" id="comp-model-lod" placeholder="e.g., 150.0">
+                        </div>
+                        <div class="form-row">
+                            <label for="comp-clip-size">Clip Size (if applicable):</label>
+                            <input type="text" id="comp-clip-size" placeholder="e.g., 60 (for magazines)">
+                        </div>
+                        <div class="form-row">
+                            <label for="comp-ammo-info">Ammo Info/Effect (if applicable):</label>
+                            <select id="comp-ammo-info">
+                                <option value="">-- Select Ammo Effect --</option>
+                            </select>
+                        </div>
+                        <div class="form-row form-row-checkbox">
+                            <input type="checkbox" id="comp-enabled" checked>
+                            <label for="comp-enabled">Component Enabled</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="export" class="tab-pane">
+                <h2>Export Addon Weapon</h2>
+                <div class="export-controls">
+                    <div class="form-row">
+                        <label for="export-folder-path-display">Export to Folder:</label>
+                        <div class="input-group">
+                            <input type="text" id="export-folder-path-display" placeholder="No folder selected..." readonly>
+                            <button id="browse-export-folder-btn">Browse...</button>
+                        </div>
+                    </div>
+                    <div class="form-row export-action-row">
+                        <button id="final-export-btn">Export Addon</button>
+                    </div>
+                </div>
+                <div id="export-status-messages" class="status-message" style="margin-top: 15px;">
+                </div>
+                <div id="asset-summary-area" style="margin-top: 20px; padding:10px; background-color: #f0f0f0;">
+                    <p style="font-style: italic;">(Asset summary will appear here in a future update)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
