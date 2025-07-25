@@ -706,7 +706,7 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
 
         transformPrimitivesToTextObjects(CWI, cwiSimpleTextChildKeys, cwiAttributeKeys);
 
-        const emptyParentTags = ["AttachPoints", "GunFeedBone", "TargetSequenceGroup"];
+        const emptyParentTags = ["AttachPoints", "GunFeedBone", "TargetSequenceGroup", "OverrideForces", "AimCameraHash", "FireCameraHash", "CamoDiffuseTexIdxs", "RotateBarrelBone", "RotateBarrelBone2"];
         for (const tagName of emptyParentTags) {
             if (CWI.hasOwnProperty(tagName)) {
                 if (CWI[tagName] === "" || (CWI[tagName] && CWI[tagName]["#text"] === "")) {
