@@ -772,23 +772,39 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
 
           delete CWI.Entry;
 
-          CWI.AttachPoints = {};
-          if (groupedComponents.size > 0) {
+          if (!CWI.AttachPoints) {
+            CWI.AttachPoints = {};
+          }
+          if (!CWI.AttachPoints.Item) {
             CWI.AttachPoints.Item = [];
+          }
+          
+          if (groupedComponents.size > 0) {
             for (const [boneName, componentsOnBone] of groupedComponents) {
-              const attachPointItem = {
-                AttachBone: { "#text": boneName },
-                Components: { Item: [] }
-              };
+              let existingAttachPoint = CWI.AttachPoints.Item.find(p => p.AttachBone && p.AttachBone["#text"] === boneName);
+              
+              if (existingAttachPoint) {
+                if (!existingAttachPoint.Components) {
+                  existingAttachPoint.Components = { Item: [] };
+                }
+                if (!existingAttachPoint.Components.Item) {
+                  existingAttachPoint.Components.Item = [];
+                }
+              } else {
+                existingAttachPoint = {
+                  AttachBone: { "#text": boneName },
+                  Components: { Item: [] }
+                };
+                CWI.AttachPoints.Item.push(existingAttachPoint);
+              }
+              
               for (const comp of componentsOnBone) {
-                attachPointItem.Components.Item.push({
+                existingAttachPoint.Components.Item.push({
                   Name: { "#text": comp.componentName },
-                  Default: { "value": String(comp.isEnabled) }
+                  Default: { "value": comp.isEnabled }
                 });
               }
-              CWI.AttachPoints.Item.push(attachPointItem);
             }
-          } else {
           }
           console.log('[AttachPoints] Reconstructed CWI.AttachPoints:', JSON.stringify(CWI.AttachPoints, null, 2));
 
