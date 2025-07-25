@@ -54,6 +54,7 @@
         {"value": "AUDIO_ITEM_MUSKET", "label": "AUDIO_ITEM_MUSKET"},
         {"value": "AUDIO_ITEM_PIPEBOMB", "label": "AUDIO_ITEM_PIPEBOMB"},
         {"value": "AUDIO_ITEM_PISTOL", "label": "AUDIO_ITEM_PISTOL"},
+        {"value": "AUDIO_ITEM_PISTOL_XM3", "label": "AUDIO_ITEM_PISTOL_XM3"},
         {"value": "AUDIO_ITEM_PISTOL50", "label": "AUDIO_ITEM_PISTOL50"},
         {"value": "AUDIO_ITEM_PISTOL_MK2", "label": "AUDIO_ITEM_PISTOL_MK2"},
         {"value": "AUDIO_ITEM_PUMPSHOTGUN", "label": "AUDIO_ITEM_PUMPSHOTGUN"},
