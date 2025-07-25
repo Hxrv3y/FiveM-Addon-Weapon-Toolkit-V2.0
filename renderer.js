@@ -975,4 +975,31 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Theme toggle button not found.");
     }
 
+    function setupDropdownSearch(inputId, selectId) {
+        const searchInput = document.getElementById(inputId);
+        const selectElement = document.getElementById(selectId);
+
+        if (searchInput && selectElement) {
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const options = selectElement.options;
+
+                for (let i = 0; i < options.length; i++) {
+                    const optionText = options[i].text.toLowerCase();
+                    if (optionText.includes(searchTerm)) {
+                        options[i].style.display = '';
+                    } else {
+                        options[i].style.display = 'none';
+                    }
+                }
+            });
+        }
+    }
+
+    setupDropdownSearch('weapon-template-search', 'weapon-template-dropdown');
+    setupDropdownSearch('config-audio-item-search', 'config-audio-item');
+    setupDropdownSearch('config-ammo-type-search', 'config-ammo-type');
+    setupDropdownSearch('config-damage-type-search', 'config-damage-type');
+    setupDropdownSearch('comp-select-template-search', 'comp-select-template');
+    setupDropdownSearch('comp-ammo-info-search', 'comp-ammo-info');
 });
