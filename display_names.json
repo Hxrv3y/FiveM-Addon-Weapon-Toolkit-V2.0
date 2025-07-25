@@ -58,5 +58,7 @@
   "WEAPON_SPECIALCARBINE": "Special Carbine",
   "WEAPON_STUNGUN": "Stun Gun",
   "WEAPON_SWITCHBLADE": "Switch Blade",
-  "WEAPON_TECPISTOL": "Tec Pistol"
+  "WEAPON_TECPISTOL": "Tec Pistol",
+  "WEAPON_STUNROD": "Stun Rod",
+  "WEAPON_PISTOLXM3": "Pistol XM3"
 }
