@@ -684,6 +684,8 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
                 formatAllFloats(obj[key]);
               } else if (typeof obj[key] === 'number') {
                 obj[key] = obj[key].toFixed(6);
+              } else if (obj[key] === '') {
+                delete obj[key];
               }
             }
           }
