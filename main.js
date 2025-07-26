@@ -620,7 +620,7 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
         ignoreAttributes: false,
         attributeNamePrefix: "",
         format: true,
-        suppressEmptyNode: false,
+        suppressEmptyNode: true,
         textNodeName: "#text"
       });
 
@@ -672,6 +672,22 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
       try {
         const xmlStr = await fs.readFile(templateWeaponMetaPath, 'utf-8');
         let weaponMetaObj = parser.parse(xmlStr);
+
+        function formatAllFloats(obj) {
+          if (obj === null || typeof obj !== 'object') {
+            return;
+          }
+
+          for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              if (typeof obj[key] === 'object') {
+                formatAllFloats(obj[key]);
+              } else if (typeof obj[key] === 'number') {
+                obj[key] = obj[key].toFixed(6);
+              }
+            }
+          }
+        }
 
         if (!weaponMetaObj.CWeaponInfoBlob) {
             weaponMetaObj.CWeaponInfoBlob = {};
@@ -811,18 +827,14 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
 
           if (CWI.OverrideForces && Array.isArray(CWI.OverrideForces.Item)) {
             CWI.OverrideForces.Item.forEach(item => {
-              if (item.ForceFront && typeof item.ForceFront.value !== 'undefined') {
-                const num = parseFloat(item.ForceFront.value);
-                if (!isNaN(num)) {
-                  item.ForceFront.value = num.toFixed(6);
+              ['ForceFront', 'ForceBack', 'ForceHitPed', 'ForceHitVehicle', 'ForceHitFlyingHeli'].forEach(forceKey => {
+                if (item[forceKey] && typeof item[forceKey].value !== 'undefined') {
+                  const num = parseFloat(item[forceKey].value);
+                  if (!isNaN(num)) {
+                    item[forceKey].value = num.toFixed(6);
+                  }
                 }
-              }
-              if (item.ForceBack && typeof item.ForceBack.value !== 'undefined') {
-                const num = parseFloat(item.ForceBack.value);
-                if (!isNaN(num)) {
-                  item.ForceBack.value = num.toFixed(6);
-                }
-              }
+              });
             });
           }
           if (CWI.OverrideForces && Array.isArray(CWI.OverrideForces.Item)) {
@@ -835,6 +847,7 @@ data_file 'WEAPONINFO_FILE' '**/weapons.meta'
             });
           }
 
+          formatAllFloats(weaponMetaObj);
           let outputXml = builder.build(weaponMetaObj);
 
           outputXml = outputXml.replace(/<Default value><\/Default>/g, '<Default value="true"></Default>');
