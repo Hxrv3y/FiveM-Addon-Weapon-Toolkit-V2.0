@@ -15,7 +15,7 @@
     <Infos>
         <Item>
             <Infos>
-                <Item type="CWeaponInfo">
+                        <Item type="CWeaponInfo">
           <Name>WEAPON_COMPACTLAUNCHER</Name>
           <Model>w_lr_compactgl</Model>
           <Audio>AUDIO_ITEM_COMPACTLAUNCHER</Audio>
@@ -269,9 +269,17 @@
           <CamoDiffuseTexIdxs />
           <RotateBarrelBone />
           <RotateBarrelBone2 />
-					</Item>
-            </Infos>
         </Item>
-    </Infos>
-    <Name>AR</Name>
+      </Infos>
+    </Item>
+    <Item>
+      <Infos />
+    </Item>
+    <Item>
+      <Infos />
+    </Item>
+  </Infos>
+  <VehicleWeaponInfos />
+  <WeaponGroupDamageForArmouredVehicleGlass />
+  <Name>AR</Name>
 </CWeaponInfoBlob>
